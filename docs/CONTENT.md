@@ -47,9 +47,14 @@ Everything else is yours to write, in this voice.
 
 ---
 
-## The demo people are synthetic
+## The demo people are synthetic — but the photos are real
 
-The seeded Space is **After Chiang Mai**: Nok, Pim, June. They are invented. Use them freely.
+The seeded Space is **After Chiang Mai**: Nok, Pim, June. Those names are invented. Use them freely.
+
+The photographs in `assests/pictures/` are **real photos a teammate contributed** — birthdays, a proposal, a wedding, a hospital visit. Two consequences:
+
+1. Never call them stock or placeholder in copy or in a commit message.
+2. If the written captions and the photographs disagree in tone, **ask the human** which story the demo should tell. The invented Chiang Mai trip may need to give way to the real occasions the photos show.
 
 **Never** invent: real customers, testimonials, user counts, press quotes, prices, or awards. There are none, and a judge asking "is that real?" ends the demo badly.
 

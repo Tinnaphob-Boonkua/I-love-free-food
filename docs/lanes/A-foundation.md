@@ -69,10 +69,17 @@ Signatures are published in `docs/INTEGRATION.md`. If you change one, update tha
 
 Add one more only if two lanes need it. Candidates: `Chip` (reminder/feeling labels), `Sheet` (add-moment container). Build them if C or D asks.
 
-**5. Assets**
+**5. Assets — do this early, three lanes are waiting on it**
 
-- `public/demo/` — placeholder media for frames. Recognizably demo material, per `docs/CONTENT.md`.
-- Favicon and OG image in the world's palette. A default Next.js favicon on a demo URL looks unfinished.
+A teammate committed 17 real photos to `assests/pictures/` (note the folder typo; leave it, do not rename in place). They are unusable as-is: outside `public/`, with spaces and parentheses in the filenames.
+
+- Copy `Moments/Moment (1..9).jpg` → `public/demo/moments/moment-1..9.jpg`
+- Copy `Special Events/*.jpg` → `public/demo/events/<kebab-name>.jpg` (birthday, proposing, wedding, wedding-ring, marriage-registration, hospital)
+- Export a manifest from `src/lib/mock-space.ts`, e.g. `demoPhotos.moments[]` and `demoPhotos.events`, and set `mediaUrl` on the seeded moments so the timeline and gifts show real photographs
+- Match photos to moments by feeling, not by index. The wedding and proposal shots belong to the wedding gift; the everyday shots belong to the trip
+- Keep every consumer tolerant of a missing `mediaUrl`
+
+Also: favicon and OG image in the world's palette. A default Next.js favicon on a demo URL looks unfinished.
 
 ---
 

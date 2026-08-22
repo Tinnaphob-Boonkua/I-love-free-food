@@ -110,7 +110,27 @@ giftSlugs, slugToKind, giftKinds
 
 ---
 
-## 3. Route contract
+## 3. Photo assets — read this before building any frame
+
+A teammate committed 17 real photos:
+
+```
+assests/pictures/Moments/Moment (1..9).jpg        # everyday moments
+assests/pictures/Special Events/*.jpg              # birthday, proposing, wedding, rings,
+                                                   # marriage registration, hospital
+```
+
+**They are not servable yet.** Next.js only serves from `public/`, and the filenames contain spaces and parentheses, which are painful in URLs.
+
+**Lane A task:** copy them into `public/demo/moments/` and `public/demo/events/` with kebab-case names, then expose a manifest from `src/lib/mock-space.ts` and point the seeded moments' `mediaUrl` at them.
+
+Until that lands, build frames against `mediaUrl` being `undefined` — every lane must handle a missing image anyway. **No lane other than A copies or renames these files.**
+
+The photos are real people. Treat them as the demo's actual content, and do not describe them as stock.
+
+---
+
+## 4. Route contract
 
 | Route | Owner | Must link to |
 |-------|-------|--------------|
@@ -124,7 +144,7 @@ Every page renders `<Wordmark />` linking home. Keep these links live even while
 
 ---
 
-## 4. Merge protocol
+## 5. Merge protocol
 
 1. Branch per lane: `lane-a`, `lane-b`, `lane-c`, `lane-d`.
 2. **Lane A merges to `main` first**, and announces it. Everyone rebases on `main` before their own merge.
@@ -137,7 +157,7 @@ A push to `main` auto-deploys to the owner's Vercel project. No Render or Supaba
 
 ---
 
-## 5. Conflict rules
+## 6. Conflict rules
 
 | Situation | What to do |
 |-----------|-----------|
@@ -149,7 +169,7 @@ A push to `main` auto-deploys to the owner's Vercel project. No Render or Supaba
 
 ---
 
-## 6. Integration smoke test
+## 7. Integration smoke test
 
 Run this after each merge. Every line must pass.
 
