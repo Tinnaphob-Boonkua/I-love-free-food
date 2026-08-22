@@ -2,13 +2,19 @@
 
 import { useState } from "react";
 
+import { demoPhotos } from "@/lib/mock-space";
+
 /**
- * Slot for a real hero photo. Drop a file at `public/demo/hero.jpg` (or
- * change `src` below) and it appears automatically. Until that file
- * exists this quietly renders nothing, so the frame's fallback content
- * shows through underneath — no code change needed either way.
+ * Hero still for the landing frame. Defaults to the Chiang Mai van —
+ * the old `/demo/hero.jpg` path never existed.
  */
-export function HeroPhoto({ src = "/demo/hero.jpg", alt }: { src?: string; alt: string }) {
+export function HeroPhoto({
+  src = demoPhotos.story.orangeVan,
+  alt,
+}: {
+  src?: string;
+  alt: string;
+}) {
   const [failed, setFailed] = useState(false);
 
   if (failed) return null;

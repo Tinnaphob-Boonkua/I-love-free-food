@@ -1,12 +1,13 @@
 import { notFound } from "next/navigation";
 import { Wordmark } from "@/components/chrome/wordmark";
 import { FilmButton } from "@/components/ui/film-button";
+import { FilmFrame } from "@/components/ui/film-frame";
 import { buildGift, slugToKind } from "@/lib/gift";
 import { demoSpace } from "@/lib/mock-space";
 
 /**
- * STUB — Lane D replaces this file.
- * Content must keep coming from buildGift(); do not re-derive slots.
+ * STUB — Lane D replaces with Lenis scrollytelling.
+ * Content still comes from buildGift(); photos are the seeded stills.
  */
 export default async function GiftPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -28,11 +29,22 @@ export default async function GiftPage({ params }: { params: Promise<{ slug: str
       </p>
 
       <div className="mt-24 flex flex-col gap-28">
-        {gift.beats.map((beat) => (
-          <article key={beat.id} className="max-w-[70ch]">
-            <p className="text-sm text-silver">{beat.dateLabel}</p>
-            <h2 className="display mt-2 text-4xl">{beat.title}</h2>
-            <p className="mt-4 font-light leading-relaxed text-halide">{beat.body}</p>
+        {gift.beats.map((beat, i) => (
+          <article key={beat.id} className="max-w-xl">
+            {beat.mediaUrl ? (
+              <FilmFrame
+                photo={beat.mediaUrl}
+                alt={beat.title}
+                rotate={i % 2 === 0 ? "-1.2deg" : "1.5deg"}
+                caption={`${beat.dateLabel} · ${beat.title}`}
+              />
+            ) : (
+              <>
+                <p className="text-sm text-silver">{beat.dateLabel}</p>
+                <h2 className="display mt-2 text-4xl">{beat.title}</h2>
+              </>
+            )}
+            <p className="mt-4 max-w-[70ch] font-light leading-relaxed text-halide">{beat.body}</p>
           </article>
         ))}
       </div>

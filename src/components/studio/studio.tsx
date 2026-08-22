@@ -1,17 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { DUR, EASE_OUT } from "@/lib/motion";
-import { addMoment, loadSpace, resetSpace } from "@/lib/storage";
-import {
-  circleLabels,
-  demoSpace,
-  modeLabels,
-  sortMoments,
-  type Moment,
-  type Space,
-} from "@/lib/mock-space";
+import { useSpace } from "@/lib/use-space";
+import { circleLabels, modeLabels, sortMoments, type Moment } from "@/lib/mock-space";
 import { Wordmark } from "@/components/chrome/wordmark";
 import { FilmButton } from "@/components/ui/film-button";
 import { Timeline } from "./timeline";
@@ -21,26 +13,17 @@ import { Reminders } from "./reminders";
 import { GiftMenu } from "./gift-menu";
 import { ViewToggle, type StudioView } from "./view-toggle";
 import { PlusIcon } from "./icons";
+import { useState } from "react";
 
 export function Studio({ spaceId }: { spaceId: string }) {
   const reduce = useReducedMotion();
-  // First render must match the server: start from the seeded Space,
-  // then adopt any localStorage state after mount.
-  const [space, setSpace] = useState<Space>(demoSpace);
+  const { space, add, reset } = useSpace(spaceId);
   const [view, setView] = useState<StudioView>("timeline");
   const [sheetOpen, setSheetOpen] = useState(false);
 
-  useEffect(() => {
-    setSpace(loadSpace(spaceId));
-  }, [spaceId]);
-
   function handleAdd(moment: Omit<Moment, "id">) {
-    setSpace((prev) => addMoment(prev, moment));
+    add(moment);
     setView("timeline");
-  }
-
-  function handleReset() {
-    setSpace(resetSpace());
   }
 
   const moments = sortMoments(space.moments);
@@ -85,11 +68,7 @@ export function Studio({ spaceId }: { spaceId: string }) {
           exit={reduce ? undefined : { opacity: 0, y: -8 }}
           transition={{ duration: DUR.panel, ease: EASE_OUT }}
         >
-          {view === "timeline" ? (
-            <Timeline moments={moments} />
-          ) : (
-            <Calendar space={space} />
-          )}
+          {view === "timeline" ? <Timeline moments={moments} /> : <Calendar space={space} />}
         </motion.div>
       </AnimatePresence>
 
@@ -97,18 +76,14 @@ export function Studio({ spaceId }: { spaceId: string }) {
         <span>Synthetic demo Space · saved in this browser only</span>
         <button
           type="button"
-          onClick={handleReset}
+          onClick={reset}
           className="text-silver/60 underline-offset-4 transition-colors duration-[120ms] ease-[cubic-bezier(0.23,1,0.32,1)] hover:text-silver hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-filament focus-visible:ring-offset-2 focus-visible:ring-offset-umbra"
         >
           Reset for rehearsal
         </button>
       </footer>
 
-      <AddMomentSheet
-        open={sheetOpen}
-        onClose={() => setSheetOpen(false)}
-        onSubmit={handleAdd}
-      />
+      <AddMomentSheet open={sheetOpen} onClose={() => setSheetOpen(false)} onSubmit={handleAdd} />
     </main>
   );
 }

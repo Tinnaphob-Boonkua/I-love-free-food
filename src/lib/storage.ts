@@ -27,6 +27,28 @@ const listeners = new Set<() => void>();
 /** The seeded Space, shared by the server render and the first client paint. */
 const serverSnapshot: Space = demoSpace;
 
+/**
+ * Stale localStorage from before mediaUrl existed would otherwise wipe the
+ * seeded photographs. Keep visitor-added moments; fill missing stills from seed.
+ */
+function hydrate(parsed: Space): Space {
+  const seedById = new Map(demoSpace.moments.map((m) => [m.id, m]));
+  const moments = parsed.moments.map((moment) => {
+    const seed = seedById.get(moment.id);
+    if (seed?.mediaUrl && !moment.mediaUrl) {
+      return { ...moment, mediaUrl: seed.mediaUrl };
+    }
+    return moment;
+  });
+
+  return {
+    ...clone(demoSpace),
+    ...parsed,
+    moments,
+    occasions: parsed.occasions?.length ? parsed.occasions : demoSpace.occasions,
+  };
+}
+
 function read(id: string): Space {
   if (typeof window === "undefined") return serverSnapshot;
   try {
@@ -36,7 +58,7 @@ function read(id: string): Space {
     if (!parsed?.id || parsed.id !== id || !Array.isArray(parsed.moments)) {
       return clone(demoSpace);
     }
-    return { ...clone(demoSpace), ...parsed };
+    return hydrate(parsed);
   } catch {
     return clone(demoSpace);
   }
