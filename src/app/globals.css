@@ -9,7 +9,7 @@
   --silver: #c4b8a8;
   --ink: #efe6d6;
   --danger: #c45c4a;
-  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+
   --font-display: "Bodoni Moda", serif;
   --font-ui: Sora, sans-serif;
 }
@@ -23,8 +23,26 @@
   --color-silver: var(--silver);
   --color-ink: var(--ink);
   --color-danger: var(--danger);
+
   --font-display: var(--font-display);
   --font-ui: var(--font-ui);
+
+  /* The one UI easing. `ease-out` in a class is this curve, not the CSS default. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+  /* Mirrors DUR in src/lib/motion.ts. Use duration-press, duration-panel, etc. */
+  --duration-press: 120ms;
+  --duration-control: 180ms;
+  --duration-panel: 220ms;
+  --duration-sheet: 300ms;
+  --duration-story: 900ms;
+
+  --radius-control: 14px;
+  --radius-frame: 16px;
+
+  /* Elevation is declared once: this shadow OR a border, never both. */
+  --shadow-frame: 0 18px 40px rgba(0, 0, 0, 0.35);
 }
 
 html,

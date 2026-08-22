@@ -41,13 +41,16 @@ export default async function SpacePage({ params }: { params: Promise<{ id: stri
       <ol className="mt-16 flex flex-col gap-12">
         {moments.map((moment, i) => (
           <li key={moment.id}>
-            <FilmFrame rotate={i % 2 === 0 ? "-1.1deg" : "1.6deg"} caption={moment.body}>
+            <FilmFrame
+              photo={moment.mediaUrl}
+              alt={moment.title}
+              rotate={i % 2 === 0 ? "-1.1deg" : "1.6deg"}
+              caption={`${formatDay(moment.occurredAt)} · ${moment.title}`}
+            >
               <div className="p-5">
                 <p className="text-xs text-filament">{formatDay(moment.occurredAt)}</p>
                 <h2 className="display mt-3 text-3xl">{moment.title}</h2>
-                {moment.feeling ? (
-                  <p className="mt-2 text-sm text-silver">{moment.feeling}</p>
-                ) : null}
+                {moment.feeling ? <p className="mt-2 text-sm text-silver">{moment.feeling}</p> : null}
               </div>
             </FilmFrame>
           </li>

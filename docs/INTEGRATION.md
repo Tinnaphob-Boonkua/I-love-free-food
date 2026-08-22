@@ -53,20 +53,47 @@ type Space = {
   people: Person[]; startedAt: string; moments: Moment[]; occasions: Occasion[];
 };
 
-demoSpace: Space              // seeded, id "demo", 7 moments, 3 occasions
+demoSpace: Space              // seeded, id "demo", 7 moments with mediaUrl, 3 occasions
+demoPhotos                    // { story, events, everyday } — servable /public paths
+occasionPhotos                // Record<OccasionKind, string[]> for Lane D
 sortMoments(moments): Moment[] // chronological, oldest first
 circleLabels: Record<Circle, string>
 modeLabels: Record<SpaceMode, string>
 ```
 
-### `@/lib/storage` — client only
+`mediaUrl` is always a still. For video and voice it is the poster. Do not feed it to `<video>` or `<audio>`.
+
+### `@/lib/use-space` — **this is how you read and write the Space**
 
 ```ts
-loadSpace(id?: string): Space            // never throws, falls back to demoSpace
-saveSpace(space: Space): void
-addMoment(space: Space, moment: Omit<Moment, "id">): Space   // returns the new Space
-resetSpace(): Space
+const { space, add, set, reset, isReady } = useSpace(); // default id "demo"
+add({ occurredAt, kind, title, body, mediaUrl? }): Space
+set(space: Space): void          // Lane B /start
+reset(): void
 ```
+
+Client components only. A write here re-renders every subscriber, including a gift page in another tab.
+
+### `@/lib/storage` — store plumbing, not for components
+
+```ts
+loadSpace(id?): Space
+saveSpace(space): void
+addMoment(space, moment): Space
+resetSpace(): Space
+subscribe(listener): () => void
+getSpaceSnapshot(id?): Space
+getServerSpaceSnapshot(): Space
+```
+
+### `@/lib/media` — client only
+
+```ts
+prepareImage(file: File): Promise<{ dataUrl, width, height }>
+MAX_UPLOAD_MB = 10
+```
+
+Put `dataUrl` on `Moment.mediaUrl`. A `blob:` URL dies on reload.
 
 ### `@/lib/format`
 
@@ -110,23 +137,17 @@ giftSlugs, slugToKind, giftKinds
 
 ---
 
-## 3. Photo assets — read this before building any frame
+## 3. Photo assets
 
-A teammate committed 17 real photos:
+Servable copies live under `public/demo/`. Import paths from `demoPhotos` and `occasionPhotos` — never hardcode the filenames.
 
-```
-assests/pictures/Moments/Moment (1..9).jpg        # everyday moments
-assests/pictures/Special Events/*.jpg              # birthday, proposing, wedding, rings,
-                                                   # marriage registration, hospital
-```
+| Folder | What |
+|--------|------|
+| `/demo/story/*` | Generated Chiang Mai stills. Seeded moments already point here via `mediaUrl`. |
+| `/demo/events/*` | Contributed occasion photos. Use `occasionPhotos[kind]`. Real people — not stock. |
+| `/demo/moments/*` | Contributed everyday frames, `demoPhotos.everyday[0..8]`. |
 
-**They are not servable yet.** Next.js only serves from `public/`, and the filenames contain spaces and parentheses, which are painful in URLs.
-
-**Lane A task:** copy them into `public/demo/moments/` and `public/demo/events/` with kebab-case names, then expose a manifest from `src/lib/mock-space.ts` and point the seeded moments' `mediaUrl` at them.
-
-Until that lands, build frames against `mediaUrl` being `undefined` — every lane must handle a missing image anyway. **No lane other than A copies or renames these files.**
-
-The photos are real people. Treat them as the demo's actual content, and do not describe them as stock.
+A visitor-added photo is a `data:` URL from `prepareImage`. `FilmFrame` accepts both. Still tolerate a missing `mediaUrl`.
 
 ---
 

@@ -5,16 +5,16 @@ import type { ButtonHTMLAttributes, ReactNode } from "react";
 
 /**
  * The only button language in MomentUS.
- * Timing comes from DESIGN.md: DUR.press (120ms), EASE_OUT, active scale 0.97.
+ * Timing comes from the tokens: duration-press, ease-out (our curve).
  */
 const base = [
-  "inline-flex items-center justify-center rounded-[14px] px-5 py-3",
+  "inline-flex items-center justify-center rounded-control px-5 py-3",
   "text-sm font-medium",
-  "transition-[transform,background-color,border-color,color]",
-  "duration-[120ms] ease-[cubic-bezier(0.23,1,0.32,1)]",
+  "transition-[transform,background-color,border-color,color,opacity]",
+  "duration-press ease-out",
   "active:scale-[0.97]",
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-filament focus-visible:ring-offset-2 focus-visible:ring-offset-umbra",
-  "disabled:pointer-events-none disabled:opacity-45",
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-filament",
+  "focus-visible:ring-offset-2 focus-visible:ring-offset-umbra",
 ].join(" ");
 
 const tones = {
@@ -22,25 +22,43 @@ const tones = {
   ghost: "border border-silver/40 bg-transparent text-halide hover:border-halide",
 } as const;
 
+/** A link cannot be :disabled, so the state is expressed for real. */
+const disabledLink = "pointer-events-none opacity-45";
+const disabledButton = "disabled:pointer-events-none disabled:opacity-45";
+
 type Props = {
   children: ReactNode;
   href?: string;
   tone?: keyof typeof tones;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
-export function FilmButton({ children, href, tone = "filament", className = "", ...rest }: Props) {
-  const classes = `${base} ${tones[tone]} ${className}`;
-
+export function FilmButton({
+  children,
+  href,
+  tone = "filament",
+  className = "",
+  disabled = false,
+  ...rest
+}: Props) {
   if (href) {
     return (
-      <Link href={href} className={classes}>
+      <Link
+        href={href}
+        aria-disabled={disabled || undefined}
+        tabIndex={disabled ? -1 : undefined}
+        className={`${base} ${tones[tone]} ${disabled ? disabledLink : ""} ${className}`}
+      >
         {children}
       </Link>
     );
   }
 
   return (
-    <button className={classes} {...rest}>
+    <button
+      disabled={disabled}
+      className={`${base} ${tones[tone]} ${disabledButton} ${className}`}
+      {...rest}
+    >
       {children}
     </button>
   );

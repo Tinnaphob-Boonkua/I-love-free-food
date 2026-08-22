@@ -133,9 +133,11 @@ Lane A owns `src/components/ui/**` and `src/components/chrome/**`. Other lanes *
 | Component | Import | Props |
 |-----------|--------|-------|
 | `FilmButton` | `@/components/ui/film-button` | `href?`, `tone?: "filament" \| "ghost"`, plus button attrs |
-| `FilmFrame` | `@/components/ui/film-frame` | `rotate?: string`, `caption?: string`, children |
+| `FilmFrame` | `@/components/ui/film-frame` | `photo?`, `alt?`, `rotate?`, `caption?`, `aspect?`, children |
+| `Chip` | `@/components/ui/chip` | `tone?: "quiet" \| "filament" \| "active"`, `onClick?`, `pressed?` |
+| `Sheet` | `@/components/ui/sheet` | native `<dialog>`: `open`, `onClose`, `title`, `description?`, `footer?` |
 | `Wordmark` | `@/components/chrome/wordmark` | `href?` |
-| `RoomLight` | `@/components/chrome/room-light` | none — already mounted in `layout.tsx`, do not add a second one |
+| `RoomLight` | `@/components/chrome/room-light` | already in `layout.tsx` — do not add a second one |
 
 Need another primitive that two lanes would use? Ask Lane A. Need something only your lane uses? Build it inside your own folder.
 

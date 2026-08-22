@@ -32,12 +32,12 @@ export default function HomePage() {
           </div>
         </div>
 
-        <FilmFrame rotate="2.4deg" caption={`${demoSpace.title} · ${demoSpace.people.length} people · seeded demo`}>
-          <div className="flex min-h-52 flex-col justify-between p-5">
-            <p className="display text-4xl text-filament">{demoSpace.moments.length} frames</p>
-            <p className="text-sm font-light text-silver">Lane B: replace with Lenis + contact-sheet motion.</p>
-          </div>
-        </FilmFrame>
+        <FilmFrame
+          photo={demoSpace.moments[0]?.mediaUrl}
+          alt={demoSpace.title}
+          rotate="2.4deg"
+          caption={`${demoSpace.title} · ${demoSpace.people.length} people · ${demoSpace.moments.length} frames`}
+        />
       </section>
     </main>
   );

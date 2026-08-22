@@ -96,21 +96,27 @@ Stub pages already exist for every route so nobody is blocked. **Replace your st
 Never re-implement these. Full signatures in `docs/INTEGRATION.md`.
 
 ```ts
-import { demoSpace, sortMoments, circleLabels, modeLabels } from "@/lib/mock-space";
-import { loadSpace, saveSpace, addMoment } from "@/lib/storage";
+import { demoSpace, demoPhotos, occasionPhotos, sortMoments, circleLabels, modeLabels } from "@/lib/mock-space";
+import { useSpace } from "@/lib/use-space";
+import { prepareImage } from "@/lib/media";
 import { formatDay, formatMonth, daysBetween, groupByMonth } from "@/lib/format";
 import { DUR, EASE_OUT, fadeUp, frameIn, stagger, inView } from "@/lib/motion";
 import { buildGift, giftHref, giftKinds, slugToKind } from "@/lib/gift";
 import { FilmButton } from "@/components/ui/film-button";
 import { FilmFrame } from "@/components/ui/film-frame";
+import { Chip } from "@/components/ui/chip";
+import { Sheet } from "@/components/ui/sheet";
 import { Wordmark } from "@/components/chrome/wordmark";
 ```
 
-Three rules that keep the four screens looking like one product:
+Four rules that keep the four screens looking like one product:
 
 1. **Never hand-write a date string.** Use `@/lib/format`.
 2. **Never hand-write a duration or easing.** Use `@/lib/motion`.
 3. **Never hand-write a hex color.** Use the Tailwind tokens (`bg-umbra`, `text-filament`, `border-silver`).
+4. **Use `useSpace()` inside any client component that renders or writes moments.** Do not call `loadSpace()` in a component — a moment added in the studio must reach the calendar and an open gift tab without a reload. `loadSpace` is store plumbing only.
+
+Also: `mediaUrl` is **always a still image**, even when `kind` is video or voice. Never put it on `<video>` or `<audio>`. Use `Sheet` and `Chip` — do not build a second modal.
 
 ---
 

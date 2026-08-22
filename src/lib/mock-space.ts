@@ -25,7 +25,10 @@ export type Moment = {
   /** One or two words. Rendered as the quiet line under a title. */
   feeling?: string;
   place?: string;
-  /** Absolute path under /public, or a blob: URL created at runtime. */
+  /**
+   * Always an image still — a path under /public, or a data: URL from prepareImage.
+   * For video and voice this is the poster frame. Never feed it to <video> or <audio>.
+   */
   mediaUrl?: string;
   /** Seconds. Only meaningful when kind === "voice". */
   durationSec?: number;
@@ -66,6 +69,58 @@ export const modeLabels: Record<SpaceMode, string> = {
 };
 
 /**
+ * Every photograph the demo can show, by role.
+ *
+ * `story` are generated to match the invented Chiang Mai trip and share one
+ * film treatment, so the timeline reads as a single roll.
+ * `events` and `everyday` are photographs a teammate contributed. They are real
+ * people — never describe them as stock.
+ *
+ * Lane D picks occasion imagery from `events`. Lane C shows whatever a moment's
+ * `mediaUrl` points at. Any consumer must tolerate `mediaUrl` being undefined,
+ * because moments a visitor adds on stage have no photo until they pick one.
+ */
+export const demoPhotos = {
+  story: {
+    orangeVan: "/demo/story/orange-van.jpg",
+    templeRain: "/demo/story/temple-rain.jpg",
+    nightMarket: "/demo/story/night-market.jpg",
+    rooftopCountdown: "/demo/story/rooftop-countdown.jpg",
+    firstMorning: "/demo/story/first-morning.jpg",
+    twoAm: "/demo/story/two-am.jpg",
+    birthdayLater: "/demo/story/birthday-later.jpg",
+  },
+  events: {
+    birthdayCake: "/demo/events/birthday-cake.jpg",
+    birthdayCandle: "/demo/events/birthday-candle.jpg",
+    birthdayWish: "/demo/events/birthday-wish.jpg",
+    proposing: "/demo/events/proposing.jpg",
+    wedding: "/demo/events/wedding.jpg",
+    weddingRing: "/demo/events/wedding-ring.jpg",
+    marriageRegistration: "/demo/events/marriage-registration.jpg",
+    hospital: "/demo/events/hospital.jpg",
+  },
+  /** Contributed everyday photographs, for frames that need filling. */
+  everyday: Array.from({ length: 9 }, (_, i) => `/demo/moments/moment-${i + 1}.jpg`),
+} as const;
+
+/** Occasion imagery for Lane D, keyed by gift kind. */
+export const occasionPhotos: Record<OccasionKind, string[]> = {
+  birthday: [
+    demoPhotos.events.birthdayCake,
+    demoPhotos.events.birthdayCandle,
+    demoPhotos.events.birthdayWish,
+  ],
+  anniversary: [demoPhotos.events.proposing, demoPhotos.events.marriageRegistration],
+  wedding: [
+    demoPhotos.events.wedding,
+    demoPhotos.events.weddingRing,
+    demoPhotos.events.marriageRegistration,
+  ],
+  thankyou: [demoPhotos.events.hospital],
+};
+
+/**
  * Seeded demo Space. Synthetic — invented people, invented trip.
  * Never present as a real customer. Every lane demos against this id.
  */
@@ -94,6 +149,7 @@ export const demoSpace: Space = {
       body: "We thought the trip started at the hostel. It started when Pim passed the bag of som-o down the row and nobody checked their phone for an hour.",
       feeling: "unhurried",
       place: "Highway north",
+      mediaUrl: demoPhotos.story.orangeVan,
     },
     {
       id: "m2",
@@ -103,6 +159,7 @@ export const demoSpace: Space = {
       body: "June's shoes were ruined. She laughed like it was the point.",
       feeling: "bright",
       place: "Wat Umong",
+      mediaUrl: demoPhotos.story.templeRain,
     },
     {
       id: "m3",
@@ -113,6 +170,7 @@ export const demoSpace: Space = {
       feeling: "full",
       place: "Sunday walking street",
       durationSec: 14,
+      mediaUrl: demoPhotos.story.nightMarket,
     },
     {
       id: "m4",
@@ -122,6 +180,7 @@ export const demoSpace: Space = {
       body: "Someone's cousin knew a code. The city went gold for four seconds. Pim cried without explaining.",
       feeling: "tender",
       place: "Nimman",
+      mediaUrl: demoPhotos.story.rooftopCountdown,
     },
     {
       id: "m5",
@@ -131,6 +190,7 @@ export const demoSpace: Space = {
       body: "Coffee too sweet. Nobody wanted to pack. The feeling we keep losing in the camera roll lives here.",
       feeling: "quiet",
       place: "Guest house kitchen",
+      mediaUrl: demoPhotos.story.firstMorning,
     },
     {
       id: "m6",
@@ -140,6 +200,7 @@ export const demoSpace: Space = {
       body: "Three cities now. The thread still opens with a photo of that noodle stall.",
       feeling: "loyal",
       place: "Everywhere",
+      mediaUrl: demoPhotos.story.twoAm,
     },
     {
       id: "m7",
@@ -149,6 +210,7 @@ export const demoSpace: Space = {
       body: "We are not in the same room. The timeline is how we still sit at that table.",
       feeling: "held",
       place: "Everywhere",
+      mediaUrl: demoPhotos.story.birthdayLater,
     },
   ],
 };
