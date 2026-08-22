@@ -1,0 +1,25 @@
+---
+description: MomentUS — shared source of truth, read before any edit
+alwaysApply: true
+---
+
+# MomentUS
+
+Read `AGENTS.md` first. It tells you how to find your lane and what to read next.
+
+**Lane discipline.** Four agents work in parallel on disjoint files. Edit only the paths your lane owns in `docs/INTEGRATION.md`. Editing another lane's file is the one unrecoverable mistake.
+
+**Shared contracts** live in `src/lib` and are owned by Lane A. Import them; never re-implement or fork them:
+
+- dates → `@/lib/format` (never hand-write a date string)
+- motion → `@/lib/motion` (never hand-write a duration or easing)
+- data → `@/lib/mock-space`, `@/lib/storage`
+- gift payload → `@/lib/gift` (the seam between studio and gift pages)
+
+**Visual world** is fixed in `DESIGN.md`: umbra ground, filament tungsten, Bodoni Moda + Sora, uneven film frames. Never a hardcoded hex. Banned: Inter, purple AI gradients, three feature cards, glassmorphism as decoration, `ease-in`, `transition: all`, `scale(0)`, emoji as icons.
+
+**Voice** is fixed in `docs/CONTENT.md`: intimate, specific, unhurried. No feature-speak on emotional surfaces.
+
+**Ask the human** before deciding emotional copy, a new visual direction, a new dependency, or cutting a demo step. Decide implementation details yourself.
+
+This round is a frontend mockup: `localStorage` only, photobooth is staged. Feasibility of the real systems is in `docs/FEASIBILITY.md`.

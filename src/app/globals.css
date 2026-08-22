@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+:root {
+  --umbra: #140f0c;
+  --umbra-2: #1e1712;
+  --filament: #d4894a;
+  --filament-hot: #f0b27a;
+  --halide: #efe6d6;
+  --silver: #c4b8a8;
+  --ink: #efe6d6;
+  --danger: #c45c4a;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --font-display: "Bodoni Moda", serif;
+  --font-ui: Sora, sans-serif;
+}
+
+@theme inline {
+  --color-umbra: var(--umbra);
+  --color-umbra-2: var(--umbra-2);
+  --color-filament: var(--filament);
+  --color-filament-hot: var(--filament-hot);
+  --color-halide: var(--halide);
+  --color-silver: var(--silver);
+  --color-ink: var(--ink);
+  --color-danger: var(--danger);
+  --font-display: var(--font-display);
+  --font-ui: var(--font-ui);
+}
+
+html,
+body {
+  background: var(--umbra);
+  color: var(--ink);
+}
+
+body {
+  font-family: var(--font-ui);
+  min-height: 100dvh;
+}
+
+h1,
+h2,
+.display {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+::selection {
+  background: var(--filament);
+  color: var(--umbra);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
