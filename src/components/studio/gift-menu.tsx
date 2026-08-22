@@ -10,6 +10,7 @@ const OPTIONS: { kind: GiftKind; label: string; note: string }[] = [
   { kind: "anniversary", label: "Anniversary", note: "A year measured in tables" },
   { kind: "birthday", label: "Birthday", note: "The year we kept for you" },
   { kind: "wedding", label: "Wedding", note: "How we sat together" },
+  { kind: "thankyou", label: "Thank-you", note: "Things we never said out loud" },
 ];
 
 /** Lane C only hands off a URL. Lane D renders the gift. */

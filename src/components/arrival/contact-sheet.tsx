@@ -28,18 +28,11 @@ export function ContactSheet({ moments }: { moments: Moment[] }) {
       {frames.map((moment, i) => (
         <motion.div key={moment.id} variants={frameIn}>
           <FilmFrame
+            photo={moment.mediaUrl}
+            alt={moment.title}
             rotate={rotations[i % rotations.length]}
             caption={[formatDay(moment.occurredAt), moment.place].filter(Boolean).join(" · ")}
-          >
-            <div className="flex min-h-40 flex-col justify-between p-4">
-              {moment.feeling ? (
-                <p className="text-xs font-light uppercase tracking-[0.18em] text-silver/70">
-                  {moment.feeling}
-                </p>
-              ) : null}
-              <p className="display text-lg text-halide">{moment.title}</p>
-            </div>
-          </FilmFrame>
+          />
         </motion.div>
       ))}
     </motion.div>

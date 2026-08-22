@@ -8,7 +8,7 @@ import { InviteMock } from "@/components/arrival/invite-mock";
 import { fadeUp } from "@/lib/motion";
 import { circleLabels, modeLabels, demoSpace } from "@/lib/mock-space";
 import type { Circle, SpaceMode } from "@/lib/mock-space";
-import { saveSpace } from "@/lib/storage";
+import { useSpace } from "@/lib/use-space";
 
 const circleCopy: Record<Circle, string> = {
   couple: "For the two of you.",
@@ -32,6 +32,7 @@ const modeOrder: SpaceMode[] = ["secret", "shared"];
  */
 export function StartFlow() {
   const router = useRouter();
+  const { set } = useSpace();
   const [circle, setCircle] = useState<Circle | null>(null);
   const [mode, setMode] = useState<SpaceMode | null>(null);
   const [spaceName, setSpaceName] = useState("");
@@ -48,7 +49,7 @@ export function StartFlow() {
         ? [{ id: "p0", name: personName.trim() }, ...demoSpace.people]
         : demoSpace.people,
     };
-    saveSpace(next);
+    set(next);
     router.push("/space/demo");
   }
 

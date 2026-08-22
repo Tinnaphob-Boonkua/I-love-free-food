@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { DUR, EASE_OUT } from "@/lib/motion";
 import { todayIso } from "@/lib/format";
+import { prepareImage } from "@/lib/media";
 import type { Moment, MomentKind } from "@/lib/mock-space";
 import { FilmButton } from "@/components/ui/film-button";
 import { CameraIcon, CloseIcon, FilmIcon, MicIcon, TextIcon } from "./icons";
@@ -69,16 +70,21 @@ export function AddMomentSheet({
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
-  function pickFile(e: React.ChangeEvent<HTMLInputElement>) {
+  async function pickFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    const max = 10 * 1024 * 1024;
-    if (file.size > max) {
-      setError("That file is bigger than 10MB. Try a smaller one.");
+    if (kind === "video") {
+      setError("Video stays staged for this demo. Add a still photo instead.");
+      e.target.value = "";
       return;
     }
-    setError(null);
-    setMediaUrl(URL.createObjectURL(file));
+    try {
+      const prepared = await prepareImage(file);
+      setError(null);
+      setMediaUrl(prepared.dataUrl);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "That photo would not open. Try another one.");
+    }
   }
 
   function submit(e: React.FormEvent) {
